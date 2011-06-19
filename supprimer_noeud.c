@@ -10,18 +10,20 @@
  * (pour l'implémentation voir les sources)
  **/
 xmlNodePtr get_produit_by_ref(xmlDocPtr doc, const char *ref) {
+    char *path;
+    xmlNodePtr n = NULL;
     xmlXPathContextPtr ctxt;
     xmlXPathObjectPtr xpathRes;
-    xmlNodePtr n = NULL;
-    char *path;
 
     xmlXPathInit();
     ctxt = xmlXPathNewContext(doc);
-    asprintf(&path, "/catalogue/produit[@reference=\"%s\"]", ref);
-    if (ctxt != NULL && path != NULL) {
-        xpathRes = xmlXPathEvalExpression(path, ctxt);
+    if (-1 == asprintf(&path, "/catalogue/produit[@reference=\"%s\"]", ref)) {
+        fprintf(stderr, "asprintf failed\n");
+        return NULL;
+    }
+    if (NULL != ctxt && NULL != path) {
         free(path);
-        if (xpathRes && xpathRes->type == XPATH_NODESET && xpathRes->nodesetval->nodeNr == 1) {
+        if (NULL != (xpathRes = xmlXPathEvalExpression(BAD_CAST path, ctxt)) && XPATH_NODESET == xpathRes->type && 1 == xpathRes->nodesetval->nodeNr) {
             n = xpathRes->nodesetval->nodeTab[0];
         }
         xmlXPathFreeObject(xpathRes);
@@ -41,7 +43,7 @@ int main() {
         fprintf(stderr, "Document XML invalide\n");
         return EXIT_FAILURE;
     }
-    
+
     // Récupération du produit "sweat"
     sweat = get_produit_by_ref(doc, "IHRC24");
     // Suppression du noeud

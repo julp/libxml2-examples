@@ -46,7 +46,7 @@ xmlConfig_t *load_config(const char *fichier) {
     }
     // Récupération de la racine
     conf->racine = xmlDocGetRootElement(conf->doc);
-    if (conf->racine != NULL && xmlStrcasecmp(conf->racine->name, "configuration")) {
+    if (NULL != conf->racine && 0 != xmlStrcasecmp(conf->racine->name, BAD_CAST "configuration")) {
         free_config(conf);
         return NULL;
     }
@@ -66,15 +66,18 @@ xmlConfig_t *load_config(const char *fichier) {
  * à l'attribut nom
  **/
 static xmlNodePtr _get_node_by_xpath(xmlConfig_t *conf, const char *directive) {
-    xmlXPathObjectPtr xpathRes;
-    xmlNodePtr n = NULL;
     char *path;
+    xmlNodePtr n = NULL;
+    xmlXPathObjectPtr xpathRes;
 
-    asprintf(&path, "/configuration/directive[@nom=\"%s\"]", directive);
+    if (-1 == asprintf(&path, "/configuration/directive[@nom=\"%s\"]", directive)) {
+        fprintf(stderr, "asprintf failed\n");
+        return NULL;
+    }
     // Evaluation de l'expression XPath
-    xpathRes = xmlXPathEvalExpression(path, conf->ctxt);
+    xpathRes = xmlXPathEvalExpression(BAD_CAST path, conf->ctxt);
     free(path);
-    if (xpathRes && xpathRes->type == XPATH_NODESET && xpathRes->nodesetval->nodeNr == 1) {
+    if (NULL != xpathRes && XPATH_NODESET == xpathRes->type && 1 == xpathRes->nodesetval->nodeNr) {
         n = xpathRes->nodesetval->nodeTab[0];
     }
     xmlXPathFreeObject(xpathRes);
@@ -86,11 +89,12 @@ static xmlNodePtr _get_node_by_xpath(xmlConfig_t *conf, const char *directive) {
  * Renvoie la valeur d'une directive
  **/
 const char *get_config(xmlConfig_t *conf, const char *directive) {
-    xmlNodePtr n = _get_node_by_xpath(conf, directive);
+    xmlNodePtr n;
 
-    if (n != NULL) {
+    if (NULL != (n =  _get_node_by_xpath(conf, directive))) {
         return xmlNodeGetContent(n);
     }
+
     return NULL;
 }
 
@@ -99,18 +103,19 @@ const char *get_config(xmlConfig_t *conf, const char *directive) {
  * sinon elle est ajoutée
  **/
 int set_config(xmlConfig_t *conf, const char *directive, const char *valeur) {
-    xmlNodePtr n = _get_node_by_xpath(conf, directive);
+    xmlNodePtr n;
 
-    if (n == NULL) { // La directive n'existe pas : ajout
-        xmlNodePtr new_dir = xmlNewTextChild(conf->racine, NULL, "directive", valeur);
-        if (new_dir == NULL) {
+    if (NULL == (n = _get_node_by_xpath(conf, directive))) { // La directive n'existe pas : ajout
+        xmlNodePtr new_dir;
+
+        if (NULL == (new_dir = xmlNewTextChild(conf->racine, NULL, BAD_CAST "directive", BAD_CAST valeur))) {
             return 0;
         }
-        if (xmlSetProp(new_dir, "nom", directive) == NULL) {
+        if (NULL == xmlSetProp(new_dir, BAD_CAST "nom", BAD_CAST directive)) {
             return 0;
         }
     } else { // La directive existe : modification
-        xmlNodeSetContent(n, valeur);
+        xmlNodeSetContent(n, BAD_CAST valeur);
     }
     return (xmlSaveFormatFile(conf->fichier, conf->doc, 1) > 0 ? 1 : 0);
 }

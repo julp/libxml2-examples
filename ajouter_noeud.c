@@ -11,20 +11,20 @@ xmlNodePtr creer_produit(const char *reference, const char *intitule, const char
     xmlNodePtr noeud_intitule;
 
     // Création du noeud "produit"
-    if ((noeud_produit = xmlNewNode(NULL, "produit")) == NULL) {
+    if ((noeud_produit = xmlNewNode(NULL, BAD_CAST "produit")) == NULL) {
         return NULL;
     }
     // Ajout de son attribut "reference"
-    if (xmlSetProp(noeud_produit, "reference", reference) == NULL) {
+    if (xmlSetProp(noeud_produit, BAD_CAST "reference", BAD_CAST reference) == NULL) {
         xmlFreeNode(noeud_produit);
         return NULL;
     }
     // Création du noeud intitule
-    if ((noeud_intitule = xmlNewNode(NULL, "intitule")) == NULL) {
+    if ((noeud_intitule = xmlNewNode(NULL, BAD_CAST "intitule")) == NULL) {
         xmlFreeNode(noeud_produit);
         return NULL;
     }
-    xmlNodeSetContent(noeud_intitule, intitule);
+    xmlNodeSetContent(noeud_intitule, BAD_CAST intitule);
     // Ajout du noeud (intitule) à son père (produit)
     if (xmlAddChild(noeud_produit, noeud_intitule) == NULL) {
         xmlFreeNode(noeud_produit);
@@ -33,7 +33,7 @@ xmlNodePtr creer_produit(const char *reference, const char *intitule, const char
     }
     // Equivalent plus rapide par rapport au noeud intitule
     // Création du noeud "prix" et ajout à son père (produit)
-    if (xmlNewTextChild(noeud_produit, NULL, "prix", prix) == NULL) {
+    if (xmlNewTextChild(noeud_produit, NULL, BAD_CAST "prix", BAD_CAST prix) == NULL) {
         xmlFreeNode(noeud_produit);
         return NULL;
     }
@@ -50,10 +50,9 @@ xmlNodePtr obtenir_premier_produit(xmlDocPtr doc) {
     xmlNodePtr n = NULL;
 
     xmlXPathInit();
-    ctxt = xmlXPathNewContext(doc);
-    if (ctxt != NULL) {
-        xpathRes = xmlXPathEvalExpression("/catalogue/produit[position()=1]", ctxt);
-        if (xpathRes && xpathRes->type == XPATH_NODESET && xpathRes->nodesetval->nodeNr == 1) {
+    if (NULL != (ctxt = xmlXPathNewContext(doc))) {
+        xpathRes = xmlXPathEvalExpression(BAD_CAST "/catalogue/produit[position()=1]", ctxt);
+        if (xpathRes && XPATH_NODESET == xpathRes->type && xpathRes->nodesetval->nodeNr == 1) {
             n = xpathRes->nodesetval->nodeTab[0];
         }
         xmlXPathFreeObject(xpathRes);

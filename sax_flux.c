@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
+#include <unistd.h>
 #include <libxml/tree.h>
 #include <libxml/parser.h>
 
@@ -13,15 +14,18 @@ void debut_element(void *user_data, const xmlChar *name, const xmlChar **attrs) 
 // Bufferise ce qui vient d'être lu
 int sax_read(void *ctxt, char *buf, int len) {
     int fd = *((int *) ctxt);
+
     return read(fd, buf, len);
 }
 
 // Fermeture du flux
 int sax_close(void *ctxt) {
     int fd = *((int *) ctxt);
+
     if (fd > 2) {
         return close(fd);
     }
+
     return 0;
 }
 

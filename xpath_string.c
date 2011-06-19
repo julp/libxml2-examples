@@ -5,29 +5,31 @@
 #include <libxml/xpath.h>
 
 int main() {
+    xmlDocPtr doc;
+    xmlXPathContextPtr ctxt;
+    xmlXPathObjectPtr xpathRes;
+
     // Ouverture du document XML
     xmlKeepBlanksDefault(0); // Ignore les noeuds texte composant la mise en forme
-    xmlDocPtr doc = xmlParseFile("catalogue.xml");
-    if (doc == NULL) {
+    if (NULL == (doc = xmlParseFile("catalogue.xml"))) {
         fprintf(stderr, "Document XML invalide\n");
         return EXIT_FAILURE;
     }
     // Initialisation de l'environnement XPath
     xmlXPathInit();
     // Création du contexte
-    xmlXPathContextPtr ctxt = xmlXPathNewContext(doc);
-    if (ctxt == NULL) {
+    if (NULL == (ctxt = xmlXPathNewContext(doc))) {
         fprintf(stderr, "Erreur lors de la création du contexte XPath\n");
         return EXIT_FAILURE;
     }
     // Evaluation de l'expression XPath
-    xmlXPathObjectPtr xpathRes = xmlXPathEvalExpression("translate(/catalogue/produit[intitule=\"Sweat Developpez.com\"]/@reference, \"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\", \"abcdefghijklmnopqrstuvwxyz0123456789\")", ctxt);
-    if (xpathRes == NULL) {
+    xpathRes = xmlXPathEvalExpression(BAD_CAST "translate(/catalogue/produit[intitule=\"Sweat Developpez.com\"]/@reference, \"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\", \"abcdefghijklmnopqrstuvwxyz0123456789\")", ctxt);
+    if (NULL == xpathRes) {
         fprintf(stderr, "Erreur sur l'expression XPath\n");
         return EXIT_FAILURE;
     }
     // Manipulation du résultat
-    if (xpathRes->type == XPATH_STRING) {
+    if (XPATH_STRING == xpathRes->type) {
         printf("Référence du produit 'Sweat Developpez.com' en minuscule : %s\n", xmlXPathCastToString(xpathRes));
     }
     // Libération de la mémoire

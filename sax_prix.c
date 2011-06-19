@@ -43,18 +43,18 @@ void fin_document(void *user_data) {
  * _ intitule ou prix : on marque l'ouverture d'une telle balise
  **/
 void debut_element(void *user_data, const xmlChar *name, const xmlChar **attrs) {
-    if (!xmlStrcmp(name, "produit")) {
+    if (!xmlStrcmp(name, BAD_CAST "produit")) {
         if (attrs != NULL) {
             int i;
             for (i = 0; attrs[i] != NULL; i+=2) {
-                if (!xmlStrcmp(attrs[i], "reference")) {
+                if (!xmlStrcmp(attrs[i], BAD_CAST "reference")) {
                     strncpy(der_ref, attrs[i+1], MAX_REF_LEN);
                 }
             }
         }
-    } else if (!xmlStrcmp(name, "intitule")) {
+    } else if (!xmlStrcmp(name, BAD_CAST "intitule")) {
         elem_courant = INTITULE;
-    } else if (!xmlStrcmp(name, "prix")) {
+    } else if (!xmlStrcmp(name, BAD_CAST "prix")) {
         elem_courant = PRIX;
     }
 }
@@ -97,7 +97,7 @@ int main() {
 
     // Parsing du document XML
     if (xmlSAXUserParseFile(&sh, NULL, "catalogue.xml") != 0) {
-        printf("Une erreur est survenue lors du parsing\n");
+        fprintf(stderr, "Une erreur est survenue lors du parsing\n");
         return EXIT_FAILURE;
     }
 

@@ -5,29 +5,30 @@
 #include <libxml/xpath.h>
 
 int main() {
+    xmlDocPtr doc;
+    xmlXPathContextPtr ctxt;
+    xmlXPathObjectPtr xpathRes;
+
     // Ouverture du document XML
     xmlKeepBlanksDefault(0); // Ignore les noeuds texte composant la mise en forme
-    xmlDocPtr doc = xmlParseFile("catalogue.xml");
-    if (doc == NULL) {
+    if (NULL == (doc = xmlParseFile("catalogue.xml"))) {
         fprintf(stderr, "Document XML invalide\n");
         return EXIT_FAILURE;
     }
     // Initialisation de l'environnement XPath
     xmlXPathInit();
     // Création du contexte
-    xmlXPathContextPtr ctxt = xmlXPathNewContext(doc);
-    if (ctxt == NULL) {
+    if (NULL == (ctxt = xmlXPathNewContext(doc))) {
         fprintf(stderr, "Erreur lors de la création du contexte XPath\n");
         return EXIT_FAILURE;
     }
     // Evaluation de l'expression XPath
-    xmlXPathObjectPtr xpathRes = xmlXPathEvalExpression("count(//produit)", ctxt);
-    if (xpathRes == NULL) {
+    if (NULL == (xpathRes = xmlXPathEvalExpression(BAD_CAST "count(//produit)", ctxt))) {
         fprintf(stderr, "Erreur sur l'expression XPath\n");
         return EXIT_FAILURE;
     }
     // Manipulation du résultat
-    if (xpathRes->type == XPATH_NUMBER) {
+    if (XPATH_NUMBER == xpathRes->type) {
         printf("Nombre de produits dans le catalogue : %.0f\n", xmlXPathCastToNumber(xpathRes));
     }
     // Libération de la mémoire
