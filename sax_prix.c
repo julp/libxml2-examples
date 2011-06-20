@@ -15,10 +15,8 @@ enum {
 };
 
 static char der_ref[MAX_REF_LEN + 1];
-static char *der_intitule;
+static xmlChar *der_intitule;
 static int elem_courant;
-
-#include "port/strndup.c"
 
 /**
  * Initialisation
@@ -31,30 +29,23 @@ void debut_document(void *user_data) {
 }
 
 /**
- * Libération des ressources
- **/
-void fin_document(void *user_data) {
-    free(der_intitule);
-}
-
-/**
  * Si l'élément courant est :
  * _ produit : on conserve la référence
  * _ intitule ou prix : on marque l'ouverture d'une telle balise
  **/
 void debut_element(void *user_data, const xmlChar *name, const xmlChar **attrs) {
-    if (!xmlStrcmp(name, BAD_CAST "produit")) {
-        if (attrs != NULL) {
+    if (xmlStrEqual(name, BAD_CAST "produit")) {
+        if (NULL != attrs) {
             int i;
             for (i = 0; attrs[i] != NULL; i+=2) {
-                if (!xmlStrcmp(attrs[i], BAD_CAST "reference")) {
-                    strncpy(der_ref, attrs[i+1], MAX_REF_LEN);
+                if (xmlStrEqual(attrs[i], BAD_CAST "reference")) {
+                    strncpy(der_ref, (char *) attrs[i+1], MAX_REF_LEN);
                 }
             }
         }
-    } else if (!xmlStrcmp(name, BAD_CAST "intitule")) {
+    } else if (xmlStrEqual(name, BAD_CAST "intitule")) {
         elem_courant = INTITULE;
-    } else if (!xmlStrcmp(name, BAD_CAST "prix")) {
+    } else if (xmlStrEqual(name, BAD_CAST "prix")) {
         elem_courant = PRIX;
     }
 }
@@ -73,14 +64,14 @@ void fin_element(void *user_data, const xmlChar *name) {
  * _ prix : affichage
  **/
 void caracteres(void *user_data, const xmlChar *ch, int len) {
-    if (elem_courant == PRIX) {
+    if (PRIX == elem_courant) {
         float prix;
-        if ((prix = strtof(ch, NULL)) < PRIX_MAX) {
-            printf("- %s : %s (%.2f Euros)\n", der_ref, der_intitule, prix);
+        if ((prix = strtof((char *) ch, NULL)) < PRIX_MAX) {
+            printf("- %s : %s (%.2f Euros)\n", der_ref, (char *) der_intitule, prix);
         }
         free(der_intitule);
-    } else if (elem_courant == INTITULE) {
-        der_intitule = (char *) strndup(ch, len);
+    } else if (INTITULE == elem_courant) {
+        der_intitule = xmlStrndup(ch, len);
     }
 }
 
@@ -90,7 +81,6 @@ int main() {
 
     // Affectation des fonctions de rappel
     sh.startDocument = debut_document;
-    sh.endDocument = fin_document;
     sh.startElement = debut_element;
     sh.endElement = fin_element;
     sh.characters = caracteres;
