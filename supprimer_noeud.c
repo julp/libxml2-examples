@@ -22,10 +22,10 @@ xmlNodePtr get_produit_by_ref(xmlDocPtr doc, const char *ref) {
         return NULL;
     }
     if (NULL != ctxt && NULL != path) {
-        free(path);
         if (NULL != (xpathRes = xmlXPathEvalExpression(BAD_CAST path, ctxt)) && XPATH_NODESET == xpathRes->type && 1 == xpathRes->nodesetval->nodeNr) {
             n = xpathRes->nodesetval->nodeTab[0];
         }
+        free(path);
         xmlXPathFreeObject(xpathRes);
         xmlXPathFreeContext(ctxt);
     }
