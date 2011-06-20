@@ -1,22 +1,30 @@
 #ifndef _GNU_SOURCE
-int asprintf(char **ptr, const char *pat, ...) {
-	va_list ap;
-	int len = 0;
+int asprintf(char **path, const char *format, ...) {
+    int n, size = 128;
+    char *np;
+    va_list ap;
 
-	va_start(ap, pat);
-    len = vsprintf(NULL, pat, ap);
-    va_end(ap);
-
-	*ptr = calloc(1, len+1);
-	if(!*ptr) {
-		perror("calloc");
-		exit(EXIT_FAILURE);
+    if (NULL == (*path = malloc(size))) {
+        return -1;
     }
-
-    va_start(ap, pat);
-    vsprintf(*ptr, pat, ap);
-    va_end(ap);
-
-    return len;
+    while (1) {
+        va_start(ap, format);
+        n = vsnprintf(*path, size, format, ap);
+        va_end(ap);
+        if (n > -1 && n < size) {
+            return n;
+        }
+        if (n > -1) {
+            size = n + 1;
+        } else {
+            size *= 2;
+        }
+        if (NULL == (np = realloc(*path, size))) {
+            free(*path);
+            return -1;
+        } else {
+            *path = np;
+        }
+    }
 }
 #endif /* _GNU_SOURCE */
