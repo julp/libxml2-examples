@@ -7,10 +7,10 @@ typedef void (*fct_parcours_t)(xmlNodePtr);
 
 void parcours_prefixe(xmlNodePtr noeud, fct_parcours_t f) {
     xmlNodePtr n;
-    
-    for (n = noeud; n != NULL; n = n->next) {
+
+    for (n = noeud; NULL != n; n = n->next) {
         f(n);
-        if ((n->type == XML_ELEMENT_NODE) && (n->children != NULL)) {
+        if ((XML_ELEMENT_NODE == n->type) && (NULL != n->children)) {
             parcours_prefixe(n->children, f);
         }
     }
@@ -18,9 +18,9 @@ void parcours_prefixe(xmlNodePtr noeud, fct_parcours_t f) {
 
 void parcours_postfixe(xmlNodePtr noeud, fct_parcours_t f) {
     xmlNodePtr n;
-    
+
     for (n = noeud; n != NULL; n = n->next) {
-        if ((n->type == XML_ELEMENT_NODE) && (n->children != NULL)) {
+        if ((XML_ELEMENT_NODE == n->type) && (NULL != n->children)) {
             parcours_postfixe(n->children, f);
         }
         f(n);
@@ -28,9 +28,9 @@ void parcours_postfixe(xmlNodePtr noeud, fct_parcours_t f) {
 }
 
 void afficher_noeud(xmlNodePtr noeud) {
-    if (noeud->type == XML_ELEMENT_NODE) {
+    if (XML_ELEMENT_NODE == noeud->type) {
         xmlChar *chemin = xmlGetNodePath(noeud);
-        if (noeud->children != NULL && noeud->children->type == XML_TEXT_NODE) {
+        if (NULL != noeud->children && XML_TEXT_NODE == noeud->children->type) {
             xmlChar *contenu = xmlNodeGetContent(noeud);
             printf("%s -> %s\n", chemin, contenu);
             xmlFree(contenu);
@@ -44,28 +44,26 @@ void afficher_noeud(xmlNodePtr noeud) {
 int main() {
     xmlDocPtr doc;
     xmlNodePtr racine;
- 
+
     // Ouverture du document
     xmlKeepBlanksDefault(0); // Ignore les noeuds texte composant la mise en forme
-    doc = xmlParseFile("parcours.xml");
-    if (doc == NULL) {
+    if (NULL == (doc = xmlParseFile("parcours.xml"))) {
         fprintf(stderr, "Document XML invalide\n");
         return EXIT_FAILURE;
     }
-    // Récupération de la racine
-    racine = xmlDocGetRootElement(doc);
-    if (racine == NULL) {
+    // RÃ©cupÃ©ration de la racine
+    if (NULL == (racine = xmlDocGetRootElement(doc))) {
         fprintf(stderr, "Document XML vierge\n");
         xmlFreeDoc(doc);
         return EXIT_FAILURE;
     }
     // Parcours
-    printf("Parcours préfixé :\n");
+    printf("Parcours prÃ©fixÃ© :\n");
     parcours_prefixe(racine, afficher_noeud);
     printf("\n\n");
-    printf("Parcours postfixé :\n");
+    printf("Parcours postfixÃ© :\n");
     parcours_postfixe(racine, afficher_noeud);
-    // Libération de la mémoire
+    // LibÃ©ration de la mÃ©moire
     xmlFreeDoc(doc);
 
     return EXIT_SUCCESS;

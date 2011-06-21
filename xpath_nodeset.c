@@ -18,9 +18,9 @@ int main() {
     }
     // Initialisation de l'environnement XPath
     xmlXPathInit();
-    // Création du contexte
+    // CrÃ©ation du contexte
     if (NULL == (ctxt = xmlXPathNewContext(doc))) {
-        fprintf(stderr, "Erreur lors de la création du contexte XPath\n");
+        fprintf(stderr, "Erreur lors de la crÃ©ation du contexte XPath\n");
         return EXIT_FAILURE;
     }
     // Evaluation de l'expression XPath
@@ -28,10 +28,10 @@ int main() {
         fprintf(stderr, "Erreur sur l'expression XPath\n");
         return EXIT_FAILURE;
     }
-    // Manipulation du résultat
+    // Manipulation du rÃ©sultat
     if (XPATH_NODESET == xpathRes->type) {
         int i;
-        printf("Produit(s) dont le prix est inférieur à 10 Euros :\n");
+        printf("Produit(s) dont le prix est infÃ©rieur Ã  10 Euros :\n");
         for (i = 0; i < xpathRes->nodesetval->nodeNr; i++) {
             xmlNodePtr n = xpathRes->nodesetval->nodeTab[i];
             if (XML_TEXT_NODE == n->type || XML_CDATA_SECTION_NODE == n->type) {
@@ -39,11 +39,10 @@ int main() {
             }
         }
     }
-    // Libération de la mémoire
+    // LibÃ©ration de la mÃ©moire
     xmlXPathFreeObject(xpathRes);
     xmlXPathFreeContext(ctxt);
     xmlFreeDoc(doc);
 
     return EXIT_SUCCESS;
 }
-

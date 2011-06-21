@@ -6,12 +6,12 @@
 #include <libxml/tree.h>
 #include <libxml/parser.h>
 
-// Appelée à chaque début d'élément
+// AppelÃ©e Ã  chaque dÃ©but d'Ã©lÃ©ment
 void debut_element(void *user_data, const xmlChar *name, const xmlChar **attrs) {
-    printf("Début de l'élément : %s\n", name);
+    printf("DÃ©but de l'Ã©lÃ©ment : %s\n", name);
 }
 
-// Bufferise ce qui vient d'être lu
+// Bufferise ce qui vient d'Ãªtre lu
 int sax_read(void *ctxt, char *buf, int len) {
     int fd = *((int *) ctxt);
 
@@ -41,16 +41,15 @@ int main() {
         fprintf(stderr, "Echec sur open\n");
         return EXIT_FAILURE;
     }
-    // Création du contexte
+    // CrÃ©ation du contexte
     if ((ctxt = xmlCreateIOParserCtxt(&sax, NULL, sax_read, sax_close, &fd, XML_CHAR_ENCODING_NONE)) == NULL) {
-        fprintf(stderr, "Erreur lors de la création du contexte\n");
+        fprintf(stderr, "Erreur lors de la crÃ©ation du contexte\n");
         return EXIT_FAILURE;
     }
     // Parsing du document
     xmlParseDocument(ctxt);
-    // Libération de la mémoire
+    // LibÃ©ration de la mÃ©moire
     xmlFreeParserCtxt(ctxt);
 
     return EXIT_SUCCESS;
 }
-

@@ -6,8 +6,8 @@
 #include "port/asprintf.c"
 
 /**
- * Retourne le noeud "produit" correspondant à une référence donnée
- * (pour l'implémentation voir les sources)
+ * Retourne le noeud "produit" correspondant Ã  une rÃ©fÃ©rence donnÃ©e
+ * (pour l'implÃ©mentation voir les sources)
  **/
 xmlNodePtr get_produit_by_ref(xmlDocPtr doc, const char *ref) {
     char *path;
@@ -44,16 +44,15 @@ int main() {
         return EXIT_FAILURE;
     }
 
-    // Récupération du produit "sweat"
+    // RÃ©cupÃ©ration du produit "sweat"
     sweat = get_produit_by_ref(doc, "IHRC24");
     // Suppression du noeud
     xmlUnlinkNode(sweat);
     xmlFreeNode(sweat);
-    // Affichage de l'arbre DOM tel qu'il est dans la mémoire
+    // Affichage de l'arbre DOM tel qu'il est dans la mÃ©moire
     xmlDocFormatDump(stdout, doc, 1);
-    // Libération de la mémoire
+    // LibÃ©ration de la mÃ©moire
     xmlFreeDoc(doc);
 
     return EXIT_FAILURE;
 }
-

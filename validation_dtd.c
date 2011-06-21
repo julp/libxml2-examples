@@ -14,7 +14,7 @@ enum {
 };
 
 /**
- * Fonction de validation d'un arbre DOM à l'aide d'une DTD
+ * Fonction de validation d'un arbre DOM Ã  l'aide d'une DTD
  **/
 int validation_dtd(xmlDocPtr doc, const char *fichier_dtd, int afficher_erreurs) {
     int ret;
@@ -25,7 +25,7 @@ int validation_dtd(xmlDocPtr doc, const char *fichier_dtd, int afficher_erreurs)
     if (NULL == (dtd = xmlParseDTD(NULL, BAD_CAST fichier_dtd))) {
         return ERROR_OCCURED;
     }
-    // Création du contexte de validation
+    // CrÃ©ation du contexte de validation
     if (NULL == (vctxt = xmlNewValidCtxt())) {
         xmlFreeDtd(dtd);
         return ERROR_OCCURED;
@@ -38,7 +38,7 @@ int validation_dtd(xmlDocPtr doc, const char *fichier_dtd, int afficher_erreurs)
     }
     // Validation
     ret = xmlValidateDtd(vctxt, doc, dtd);
-    // Libération de la mémoire
+    // LibÃ©ration de la mÃ©moire
     xmlFreeValidCtxt(vctxt);
     xmlFreeDtd(dtd);
 
@@ -46,7 +46,7 @@ int validation_dtd(xmlDocPtr doc, const char *fichier_dtd, int afficher_erreurs)
 }
 
 void usage() {
-    fprintf(stderr, "validation_dtd [fichier XML à valider] [fichier DTD]\n");
+    fprintf(stderr, "validation_dtd [fichier XML Ã  valider] [fichier DTD]\n");
     exit(EXIT_USAGE);
 }
 
@@ -71,9 +71,8 @@ int main(int argc, char **argv) {
         fprintf(stderr, "Le document n'est pas valide ou une erreur interne est survenue\n");
         ret = EXIT_FAILURE;
     }
-    // Libération de la mémoire
+    // LibÃ©ration de la mÃ©moire
     xmlFreeDoc(doc);
 
     return ret;
 }
-

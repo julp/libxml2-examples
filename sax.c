@@ -5,32 +5,32 @@
 #include <libxml/parser.h>
 
 /**
- * Appelée une seule fois au démarrage du parsing d'un document.
- * Généralement utilisée pour initialiser ou allouée des ressources.
+ * AppelÃ©e une seule fois au dÃ©marrage du parsing d'un document.
+ * GÃ©nÃ©ralement utilisÃ©e pour initialiser ou allouÃ©e des ressources.
  **/
 void debut_document(void *user_data) {
-    printf("Début du document\n");
+    printf("DÃ©but du document\n");
 }
 
 /**
- * Dernière fonction à être appelée (en fin de parsing).
- * Couramment employée pour libérer les ressources précédemment
- * allouées.
+ * DerniÃ¨re fonction Ã  Ãªtre appelÃ©e (en fin de parsing).
+ * Couramment employÃ©e pour libÃ©rer les ressources prÃ©cÃ©demment
+ * allouÃ©es.
  **/
 void fin_document(void *user_data) {
     printf("Fin du document\n");
 }
 
 /**
- * Appelée à la rencontre de chaque balise.
- * Le paramètre name fourni le nom de l'élément
- * et le paramètre attrs (si différent de NULL)
- * dévoile la liste des attributs (indices pairs)
+ * AppelÃ©e Ã  la rencontre de chaque balise.
+ * Le paramÃ¨tre name fourni le nom de l'Ã©lÃ©ment
+ * et le paramÃ¨tre attrs (si diffÃ©rent de NULL)
+ * dÃ©voile la liste des attributs (indices pairs)
  * et leurs valeurs (indices impairs)
  **/
 void debut_element(void *user_data, const xmlChar *name, const xmlChar **attrs) {
-    printf("Début de l'élément : %s\n", name);
-    if (attrs != NULL) {
+    printf("DÃ©but de l'Ã©lÃ©ment : %s\n", name);
+    if (NULL != attrs) {
         int i;
         for (i = 0; attrs[i] != NULL; i+=2) {
             printf("Attribut '%s' a pour valeur %s\n", attrs[i], attrs[i+1]);
@@ -39,38 +39,38 @@ void debut_element(void *user_data, const xmlChar *name, const xmlChar **attrs) 
 }
 
 /**
- * Appelée à chaque fin de balise. Elle ne fournit
- * que le nom de l'élément (paramètre name).
+ * AppelÃ©e Ã  chaque fin de balise. Elle ne fournit
+ * que le nom de l'Ã©lÃ©ment (paramÃ¨tre name).
  **/
 void fin_element(void *user_data, const xmlChar *name) {
-    printf("Fin de l'élément : %s\n", name);
+    printf("Fin de l'Ã©lÃ©ment : %s\n", name);
 }
 
 /**
- * Appelée pour chaque noeud textuel
- * Le paramètre ch représente ce texte
+ * AppelÃ©e pour chaque noeud textuel
+ * Le paramÃ¨tre ch reprÃ©sente ce texte
  * et len sa longueur.
  * Attention :
- * - cette chaîne est codée en UTF-8
- * - cette chaîne n'est peut être pas terminée par un caractère nul
+ * - cette chaÃ®ne est codÃ©e en UTF-8
+ * - cette chaÃ®ne n'est peut Ãªtre pas terminÃ©e par un caractÃ¨re nul
  **/
 void caracteres(void *user_data, const xmlChar *ch, int len) {
     printf("Element texte : (longueur = %d) %.*s\n", len, len, ch);
 }
 
 /**
- * Appelée pour chaque section CDATA
- * Le paramètre ch correspond au contenu de la section sans
+ * AppelÃ©e pour chaque section CDATA
+ * Le paramÃ¨tre ch correspond au contenu de la section sans
  * <![CDATA[ et ]]> et len en fourni la longueur.
- * Attention : cette chaîne est encodée en UTF-8
+ * Attention : cette chaÃ®ne est encodÃ©e en UTF-8
  **/
 void cdata(void *user_data, const xmlChar *ch, int len) {
     printf("Element CDATA : (longueur = %d) %s\n", len, ch);
 }
 
 /**
- * Appelée pour chaque commentaire rencontré.
- * Le paramètre ch désigne le contenu du commentaire
+ * AppelÃ©e pour chaque commentaire rencontrÃ©.
+ * Le paramÃ¨tre ch dÃ©signe le contenu du commentaire
  * (ie sans <!-- ni -->).
  **/
 void commentaire(void *user_data, const xmlChar *ch) {
@@ -78,20 +78,20 @@ void commentaire(void *user_data, const xmlChar *ch) {
 }
 
 /**
- * Appelée pour chaque entité.
- * Le paramètre name est le nom de l'entité débarrassé
+ * AppelÃ©e pour chaque entitÃ©.
+ * Le paramÃ¨tre name est le nom de l'entitÃ© dÃ©barrassÃ©
  * de & et ; (exemple &gt; -> gt)
  **/
 xmlEntityPtr entite(void *user_data, const xmlChar *name) {
-    printf("Entité rencontrée : %s\n", name);
-    return xmlGetPredefinedEntity(name); // Ceci est le traitement par défaut
+    printf("EntitÃ© rencontrÃ©e : %s\n", name);
+    return xmlGetPredefinedEntity(name); // Ceci est le traitement par dÃ©faut
 }
 
 /**
- * Appelée lorsque plus d'un caractères blancs (espace ou tabulation)
- * se succèdent.
+ * AppelÃ©e lorsque plus d'un caractÃ¨res blancs (espace ou tabulation)
+ * se succÃ¨dent.
  * (avec une regexp : [ \t]{2,} ou encore avec la POSIX [[:blank:]]{2,})
- * Note : inutilisé
+ * Note : inutilisÃ©
  **/
 void blanc(void *user_data, const xmlChar *ch, int len) {
     printf("Blancs : (longueur = %d) #%s#\n", len, ch);
@@ -105,7 +105,7 @@ void pi(void *user_data, const xmlChar *target, const xmlChar *data) {
 }
 
 /**
- * Gestion des éventuelles erreurs rencontrées.
+ * Gestion des Ã©ventuelles erreurs rencontrÃ©es.
  * Ici on se contente d'afficher les messages sur
  * la sortie d'erreur standard.
  **/
@@ -134,7 +134,7 @@ void erreur_fatale(void *user_data, const char *msg, ...) {
 }
 
 int main() {
-    // Initialisation à zéro de tous les membres (NULL pour un pointeur par conversion)
+    // Initialisation Ã  zÃ©ro de tous les membres (NULL pour un pointeur par conversion)
     xmlSAXHandler sh = { 0 };
 
     // Affectation des fonctions de rappel
@@ -149,7 +149,7 @@ int main() {
     sh.cdataBlock = cdata;
     sh.comment = commentaire;
     sh.getEntity = entite;
-    sh.ignorableWhitespace = blanc; // Inutilisé !
+    sh.ignorableWhitespace = blanc; // InutilisÃ© !
     sh.processingInstruction = pi; // Ne fonctionne pas !
 
     // Parsing du document XML

@@ -25,12 +25,12 @@ void debut_document(void *user_data) {
     *der_ref = '\0';
     der_intitule = NULL;
     elem_courant = AUTRE;
-    printf("Liste des produits dont le prix est strictement inférieur à %.2f :\n", PRIX_MAX);
+    printf("Liste des produits dont le prix est strictement infÃ©rieur Ã  %.2f :\n", PRIX_MAX);
 }
 
 /**
- * Si l'élément courant est :
- * _ produit : on conserve la référence
+ * Si l'Ã©lÃ©ment courant est :
+ * _ produit : on conserve la rÃ©fÃ©rence
  * _ intitule ou prix : on marque l'ouverture d'une telle balise
  **/
 void debut_element(void *user_data, const xmlChar *name, const xmlChar **attrs) {
@@ -51,15 +51,15 @@ void debut_element(void *user_data, const xmlChar *name, const xmlChar **attrs) 
 }
 
 /**
- * Réinitialisation du marqueur qui nous sert à savoir
- * où l'on est dans le document XML
+ * RÃ©initialisation du marqueur qui nous sert Ã  savoir
+ * oÃ¹ l'on est dans le document XML
  **/
 void fin_element(void *user_data, const xmlChar *name) {
     elem_courant = AUTRE;
 }
 
 /**
- * Suivant l'élément d'où provient le texte :
+ * Suivant l'Ã©lÃ©ment d'oÃ¹ provient le texte :
  * _ intitule : conservation
  * _ prix : affichage
  **/
@@ -76,7 +76,7 @@ void caracteres(void *user_data, const xmlChar *ch, int len) {
 }
 
 int main() {
-    // Initialisation à zéro de tous les membres (NULL pour un pointeur par conversion)
+    // Initialisation Ã  zÃ©ro de tous les membres (NULL pour un pointeur par conversion)
     xmlSAXHandler sh = { 0 };
 
     // Affectation des fonctions de rappel

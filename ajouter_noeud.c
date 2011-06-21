@@ -4,13 +4,13 @@
 #include <libxml/xpath.h>
 
 /**
- * Retourne un nouveau noeud correspondant à un produit (NULL en cas d'erreur)
+ * Retourne un nouveau noeud correspondant Ã  un produit (NULL en cas d'erreur)
  **/
 xmlNodePtr creer_produit(const char *reference, const char *intitule, const char *prix) {
     xmlNodePtr noeud_produit;
     xmlNodePtr noeud_intitule;
 
-    // Création du noeud "produit"
+    // CrÃ©ation du noeud "produit"
     if ((noeud_produit = xmlNewNode(NULL, BAD_CAST "produit")) == NULL) {
         return NULL;
     }
@@ -19,20 +19,20 @@ xmlNodePtr creer_produit(const char *reference, const char *intitule, const char
         xmlFreeNode(noeud_produit);
         return NULL;
     }
-    // Création du noeud intitule
+    // CrÃ©ation du noeud intitule
     if ((noeud_intitule = xmlNewNode(NULL, BAD_CAST "intitule")) == NULL) {
         xmlFreeNode(noeud_produit);
         return NULL;
     }
     xmlNodeSetContent(noeud_intitule, BAD_CAST intitule);
-    // Ajout du noeud (intitule) à son père (produit)
+    // Ajout du noeud (intitule) Ã  son pÃ¨re (produit)
     if (xmlAddChild(noeud_produit, noeud_intitule) == NULL) {
         xmlFreeNode(noeud_produit);
         xmlFreeNode(noeud_intitule);
         return NULL;
     }
     // Equivalent plus rapide par rapport au noeud intitule
-    // Création du noeud "prix" et ajout à son père (produit)
+    // CrÃ©ation du noeud "prix" et ajout Ã  son pÃ¨re (produit)
     if (xmlNewTextChild(noeud_produit, NULL, BAD_CAST "prix", BAD_CAST prix) == NULL) {
         xmlFreeNode(noeud_produit);
         return NULL;
@@ -73,26 +73,26 @@ int main() {
         fprintf(stderr, "Document XML invalide\n");
         return EXIT_FAILURE;
     }
-    // Récupération de la racine
+    // RÃ©cupÃ©ration de la racine
     racine = xmlDocGetRootElement(doc);
     if (racine == NULL) {
         fprintf(stderr, "Document XML vierge\n");
         xmlFreeDoc(doc);
         return EXIT_FAILURE;
     }
-    // Récupération du premier produit
+    // RÃ©cupÃ©ration du premier produit
     premier_prod = obtenir_premier_produit(doc);
     if (premier_prod == NULL) {
         fprintf(stderr, "Impossible de trouver le premier produit\n");
         xmlFreeDoc(doc);
         return EXIT_FAILURE;
     }
-    // Ajout d'un nouveau produit avant le premier produit (en tête)
+    // Ajout d'un nouveau produit avant le premier produit (en tÃªte)
     nouv_prod = creer_produit("CD0YAH", "Autocollant Developpez.com", "0.80");
     if (nouv_prod) {
         xmlAddPrevSibling(premier_prod, nouv_prod);
     }
-    // Ajout d'un nouveau produit après le premier produit
+    // Ajout d'un nouveau produit aprÃ¨s le premier produit
     nouv_prod = creer_produit("U0TZ6K", "Lot de 10 autocollants Developpez.com", "5.00");
     if (nouv_prod) {
         xmlAddNextSibling(premier_prod, nouv_prod);
@@ -102,9 +102,9 @@ int main() {
     if (nouv_prod) {
         xmlAddSibling(premier_prod, nouv_prod);
     }
-    // Affichage de l'arbre DOM tel qu'il est en mémoire
+    // Affichage de l'arbre DOM tel qu'il est en mÃ©moire
     xmlDocFormatDump(stdout, doc, 1);
-    // Libération de la mémoire
+    // LibÃ©ration de la mÃ©moire
     xmlFreeDoc(doc);
 
     return EXIT_SUCCESS;

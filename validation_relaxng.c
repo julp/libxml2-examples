@@ -8,9 +8,9 @@ enum {
     NOT_VALID = 0,      // Le document n'est pas valide
     VALID = 1           // Le document est valide
 };
- 
+
 /**
- * Fonction de validation d'un arbre DOM à l'aide d'une grammaire Relax NG
+ * Fonction de validation d'un arbre DOM Ã  l'aide d'une grammaire Relax NG
  **/
 int validation_relaxng(xmlDocPtr doc, const char *fichier_rng, int afficher_erreurs) {
     int ret;
@@ -28,7 +28,7 @@ int validation_relaxng(xmlDocPtr doc, const char *fichier_rng, int afficher_erre
     if (rng == NULL) {
         return ERROR_OCCURED;
     }
-    // Création du contexte de validation
+    // CrÃ©ation du contexte de validation
     if ((vctxt = xmlRelaxNGNewValidCtxt(rng)) == NULL) {
         xmlRelaxNGFree(rng);
         return ERROR_OCCURED;
@@ -39,7 +39,7 @@ int validation_relaxng(xmlDocPtr doc, const char *fichier_rng, int afficher_erre
     }
     // Validation
     ret = (xmlRelaxNGValidateDoc(vctxt, doc) == 0 ? VALID : NOT_VALID);
-    // Libération de la mémoire
+    // LibÃ©ration de la mÃ©moire
     xmlRelaxNGFreeValidCtxt(vctxt);
     xmlRelaxNGFree(rng);
 
@@ -47,7 +47,7 @@ int validation_relaxng(xmlDocPtr doc, const char *fichier_rng, int afficher_erre
 }
 
 void usage() {
-    printf("validation_dtd [fichier XML à valider] [grammaire Relax NG]\n");
+    printf("validation_dtd [fichier XML Ã  valider] [grammaire Relax NG]\n");
 }
 
 int main(int argc, char **argv) {
@@ -69,9 +69,8 @@ int main(int argc, char **argv) {
     } else {
         printf("Le document n'est pas valide ou une erreur interne est survenue\n");
     }
-    // Libération de la mémoire
+    // LibÃ©ration de la mÃ©moire
     xmlFreeDoc(doc);
 
     return EXIT_SUCCESS;
 }
-

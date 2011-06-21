@@ -22,7 +22,7 @@ typedef struct {
 } xmlConfig_t;
 
 /**
- * Libération des ressources de la structure xmlConfig_t
+ * LibÃ©ration des ressources de la structure xmlConfig_t
  **/
 void free_config(xmlConfig_t *conf) {
     if (NULL != conf->ctxt) {
@@ -38,7 +38,7 @@ void free_config(xmlConfig_t *conf) {
 }
 
 /**
- * Initialisation et chargement du fichier XML en mémoire
+ * Initialisation et chargement du fichier XML en mÃ©moire
  **/
 xmlConfig_t *load_config(const char *fichier) {
     struct stat sts;
@@ -53,10 +53,10 @@ xmlConfig_t *load_config(const char *fichier) {
         free_config(conf);
         return NULL;
     }
-    // Création de l'arbre DOM à partir du fichier XML
+    // CrÃ©ation de l'arbre DOM Ã  partir du fichier XML
     xmlKeepBlanksDefault(0);
     if (-1 == stat(fichier, &sts)) {
-        if (ENOENT == errno) { // le fichier n'existe pas, on crée un nouvel arbre en mémoire
+        if (ENOENT == errno) { // le fichier n'existe pas, on crÃ©e un nouvel arbre en mÃ©moire
             conf->doc = xmlNewDoc(BAD_CAST "1.0");
             conf->racine = xmlNewNode(NULL, BAD_CAST NOM_RACINE);
             xmlDocSetRootElement(conf->doc, conf->racine);
@@ -68,7 +68,7 @@ xmlConfig_t *load_config(const char *fichier) {
             free_config(conf);
             return NULL;
         }
-        // Récupération de la racine
+        // RÃ©cupÃ©ration de la racine
         conf->racine = xmlDocGetRootElement(conf->doc);
         if (NULL != conf->racine && 0 != xmlStrcasecmp(conf->racine->name, BAD_CAST NOM_RACINE)) {
             free_config(conf);
@@ -77,7 +77,7 @@ xmlConfig_t *load_config(const char *fichier) {
     }
     // Initialisation de l'environnement XPath
     xmlXPathInit();
-    // Création d'un contexte pour les requêtes XPath
+    // CrÃ©ation d'un contexte pour les requÃªtes XPath
     conf->ctxt = xmlXPathNewContext(conf->doc);
     if (NULL == conf->ctxt) {
         free_config(conf);
@@ -88,8 +88,8 @@ xmlConfig_t *load_config(const char *fichier) {
 }
 
 /**
- * Fonction privée retournant l'élément <directive> via XPath correspondant
- * à l'attribut nom
+ * Fonction privÃ©e retournant l'Ã©lÃ©ment <directive> via XPath correspondant
+ * Ã  l'attribut nom
  **/
 static xmlNodePtr _get_node_by_xpath(xmlConfig_t *conf, const char *directive) {
     char *path;
@@ -125,8 +125,8 @@ const xmlChar *get_config(xmlConfig_t *conf, const char *directive) {
 }
 
 /**
- * Modifie la valeur d'une directive si celle-ci est présente dans le fichier XML
- * sinon elle est ajoutée
+ * Modifie la valeur d'une directive si celle-ci est prÃ©sente dans le fichier XML
+ * sinon elle est ajoutÃ©e
  **/
 int set_config(xmlConfig_t *conf, const char *directive, const char *valeur) {
     xmlNodePtr n;
@@ -164,7 +164,7 @@ int main() {
         return EXIT_FAILURE;
     }
 
-    // Récupération de la valeur des directives
+    // RÃ©cupÃ©ration de la valeur des directives
     print_config(conf, "directive_inexistante");
     print_config(conf, "verifier_version");
 
@@ -172,13 +172,12 @@ int main() {
     set_config(conf, "verifier_version", "Off");
     set_config(conf, "taille_police", "12");
 
-    // Vérification des modifications
+    // VÃ©rification des modifications
     print_config(conf, "verifier_version");
     print_config(conf, "taille_police");
 
-    // Libération de la mémoire
+    // LibÃ©ration de la mÃ©moire
     free_config(conf);
 
     return EXIT_SUCCESS;
 }
-

@@ -17,9 +17,9 @@ int main() {
     }
     // Initialisation de l'environnement XPath
     xmlXPathInit();
-    // Création du contexte
+    // CrÃ©ation du contexte
     if (NULL == (ctxt = xmlXPathNewContext(doc))) {
-        fprintf(stderr, "Erreur lors de la création du contexte XPath\n");
+        fprintf(stderr, "Erreur lors de la crÃ©ation du contexte XPath\n");
         return EXIT_FAILURE;
     }
     // Evaluation de l'expression XPath
@@ -27,15 +27,14 @@ int main() {
         fprintf(stderr, "Erreur sur l'expression XPath\n");
         return EXIT_FAILURE;
     }
-    // Manipulation du résultat
+    // Manipulation du rÃ©sultat
     if (XPATH_NUMBER == xpathRes->type) {
         printf("Nombre de produits dans le catalogue : %.0f\n", xmlXPathCastToNumber(xpathRes));
     }
-    // Libération de la mémoire
+    // LibÃ©ration de la mÃ©moire
     xmlXPathFreeObject(xpathRes);
     xmlXPathFreeContext(ctxt);
     xmlFreeDoc(doc);
 
     return EXIT_SUCCESS;
 }
-

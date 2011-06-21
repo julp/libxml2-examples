@@ -8,9 +8,9 @@ enum {
     NOT_VALID = 0,      // Le document n'est pas valide
     VALID = 1           // Le document est valide
 };
- 
+
 /**
- * Fonction de validation d'un arbre DOM à l'aide d'un XML Schema
+ * Fonction de validation d'un arbre DOM Ã  l'aide d'un XML Schema
  **/
 int validation_schema(xmlDocPtr doc, const char *xml_schema, int afficher_erreurs) {
     int ret;
@@ -28,7 +28,7 @@ int validation_schema(xmlDocPtr doc, const char *xml_schema, int afficher_erreur
     if (schema == NULL) {
         return ERROR_OCCURED;
     }
-    // Création du contexte de validation
+    // CrÃ©ation du contexte de validation
     if ((vctxt = xmlSchemaNewValidCtxt(schema)) == NULL) {
         xmlSchemaFree(schema);
         return ERROR_OCCURED;
@@ -39,7 +39,7 @@ int validation_schema(xmlDocPtr doc, const char *xml_schema, int afficher_erreur
     }
     // Validation
     ret = (xmlSchemaValidateDoc(vctxt, doc) == 0 ? VALID : NOT_VALID);
-    // Libération de la mémoire
+    // LibÃ©ration de la mÃ©moire
     xmlSchemaFree(schema);
     xmlSchemaFreeValidCtxt(vctxt);
 
@@ -47,7 +47,7 @@ int validation_schema(xmlDocPtr doc, const char *xml_schema, int afficher_erreur
 }
 
 void usage() {
-    printf("validation_schema [fichier XML à valider] [fichier XML Schema]\n");
+    printf("validation_schema [fichier XML Ã  valider] [fichier XML Schema]\n");
 }
 
 int main(int argc, char **argv) {
@@ -69,9 +69,8 @@ int main(int argc, char **argv) {
     } else {
         printf("Le document n'est pas valide ou une erreur interne est survenue\n");
     }
-    // Libération de la mémoire
+    // LibÃ©ration de la mÃ©moire
     xmlFreeDoc(doc);
 
     return EXIT_SUCCESS;
 }
-

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <libxml/parser.h>
- 
+
 int main() {
     xmlDocPtr doc;
     xmlNodePtr racine;
@@ -12,7 +12,7 @@ int main() {
         fprintf(stderr, "Document XML invalide\n");
         return EXIT_FAILURE;
     }
-    // Récupération de la racine
+    // RÃ©cupÃ©ration de la racine
     racine = xmlDocGetRootElement(doc);
     if (racine == NULL) {
         fprintf(stderr, "Document XML vierge\n");
@@ -20,9 +20,8 @@ int main() {
         return EXIT_FAILURE;
     }
     printf("La racine du document est : %s\n", racine->name);
-    // Libération de la mémoire
+    // LibÃ©ration de la mÃ©moire
     xmlFreeDoc(doc);
 
     return EXIT_SUCCESS;
 }
-
