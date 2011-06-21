@@ -15,7 +15,7 @@ enum {
 };
 
 static char der_ref[MAX_REF_LEN + 1];
-static xmlChar *der_intitule;
+static xmlChar *der_intitule = NULL;
 static int elem_courant;
 
 /**
@@ -69,7 +69,7 @@ void caracteres(void *user_data, const xmlChar *ch, int len) {
         if ((prix = strtof((char *) ch, NULL)) < PRIX_MAX) {
             printf("- %s : %s (%.2f Euros)\n", der_ref, (char *) der_intitule, prix);
         }
-        free(der_intitule);
+        xmlFree(der_intitule);
     } else if (INTITULE == elem_courant) {
         der_intitule = xmlStrndup(ch, len);
     }
